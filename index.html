@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGO颜色</title>
+    <style>
+        *{margin: 0;padding: 0;}
+        h2{width: 320px;text-align: center;padding: 6px;}
+        div#imgs{width: 320px;background: #ff99f9;border: 1px solid #999;position: relative;}
+        div#imgs>img#images{width: 92px;height: 92px;border-radius: 50%;position: absolute;top: 78px;left: 75px;}
+        div#imgs>p#userName{font-family:"华文行楷";font-size: 32px;font-weight: bolder;position: absolute;left: 266px;top: 168px;writing-mode:vertical-lr;letter-spacing:10px;}
+        p#changImg{padding: 2px 0;border: 1px solid #666;width: 100px;text-align: center;background: skyblue;}
+        input#changText{padding: 2px 4px;width: 100px;}
+        div#imgs>img{display: block;width: 320px;height: 320px;}
+    </style>
+</head>
+<body>
+    <div id="imgs">
+        <img src="./demo.png" alt="请联系客服" />
+        <img src="./images/touxiang0.jpg" alt="" id="images"/>
+    </div>
+    <h2>图片显示</h2>
+    <p>当前第<span id="nowImg">1</span>张 / 共14张</p>
+    <p onclick="changTouXiang()" id="changImg">更改头像</p>   
+    <h2>背景颜色</h2>
+    <input type="color" name="color" id="color" onchange="rangeColor()" value="#ff99f9"/>
+    颜色：<span id="colorText">#ff99f9</span><br>
+    <label for="rangeR">R（红）：</label>
+    <input oninput="rangeRGB()" type="range" name="rangeR" id="rangeR" max="255"/>
+    <input type="number" oninput="rangeNumber()" name="numR" id="numR" max="255" min="0"><br>
+    <label for="rangeG">G（绿）：</label>
+    <input oninput="rangeRGB()" type="range" name="rangeG" id="rangeG" max="255"/>
+    <input type="number" oninput="rangeNumber()" name="numG" id="numG" max="255" min="0"><br>
+    <label for="rangeB">B（蓝）：</label>
+    <input oninput="rangeRGB()" type="range" name="rangeB" id="rangeB" max="255"/>
+    <input type="number" oninput="rangeNumber()" name="numB" id="numB" max="255" min="0"><br>
+    <script>
+        let image = document.getElementById('imgs');
+        let images = document.getElementById('images');
+        let color = document.getElementById('color');    
+        let rangeR = document.getElementById('rangeR');
+        let rangeG = document.getElementById('rangeG');
+        let rangeB = document.getElementById('rangeB');
+        let numR = document.getElementById('numR');
+        let numG = document.getElementById('numG');
+        let numB = document.getElementById('numB');
+        let colorText = document.getElementById('colorText');
+        numR.value = 255;numG.value = 153;numB.value = 249;
+        rangeR.value = 255;rangeG.value = 153;rangeB.value = 249;
+        color.value = '#ff99f9';
+        let total = 14;
+        let next = 1;
+        var imgs = new Array()
+        function changTouXiang(){
+            images.src = './images/touxiang'+next+'.jpg'
+            next ++;
+            document.getElementById('nowImg').innerHTML = next;
+            if (next >= total){next = 0}
+        }
+        function rangeColors(rgb) {
+            let re = rgb.match(/[0-9]{0,3}/g);//利用正则表达式去掉多余的部分，将rgb中的数字提取
+            let bgColor = "#"; let num= ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+            for (let i = 0; i < re.length; i++) {
+                let r = null, c = re[i], l = c;
+                let sixteen = [];
+                while (c >= 16){
+                    r = c % 16;
+                    c = (c / 16) >> 0;
+                    sixteen.push(num[r]);
+                } sixteen.push(num[c]);
+                if(l < 16&&l != ""){
+                    sixteen.push(0)
+                }
+                bgColor += sixteen.reverse().join('');
+            }
+            color.value = bgColor;
+            colorText.innerHTML = bgColor;
+            image.style.backgroundColor = rgb;
+        }
+        function rangeRGB(){
+            let rgb = 'rgb('+rangeR.value+','+rangeG.value+','+rangeB.value+')';
+            numR.value = rangeR.value;
+            numG.value = rangeG.value;
+            numB.value = rangeB.value;
+            rangeColors(rgb);
+        }
+        function rangeNumber() {
+            let rgb = 'rgb('+numR.value+','+numG.value+','+numB.value+')';
+            rangeR.value = numR.value;
+            rangeG.value = numG.value;
+            rangeB.value = numB.value;
+            rangeColors(rgb);
+        }
+        function rangeColor(){
+            image.style.backgroundColor = color.value;
+            let colorR = parseInt('0x' + color.value.slice(1, 3));
+            let colorG = parseInt('0x' + color.value.slice(3, 5));
+            let colorB = parseInt('0x' + color.value.slice(5, 7));
+            rangeR.value = colorR;rangeG.value = colorG;rangeB.value = colorB;
+            numR.value = colorR;numG.value = colorG;numB.value = colorB;
+            colorText.innerHTML = color.value;
+        }
+        function preload(){
+			for (i = 0; i < preload.arguments.length; i++) {
+				imgs[i] = new Image()
+				imgs[i].src = preload.arguments[i]
+			}
+		}
+		preload(
+		    "./images/touxiang1.jpg",
+			"./images/touxiang2.jpg",
+			"./images/touxiang3.jpg",
+			"./images/touxiang4.jpg",
+			"./images/touxiang5.jpg",
+			"./images/touxiang6.jpg",
+			"./images/touxiang7.jpg",
+			"./images/touxiang8.jpg",
+			"./images/touxiang9.jpg",
+			"./images/touxiang10.jpg",
+			"./images/touxiang11.jpg",
+			"./images/touxiang12.jpg",
+			"./images/touxiang13.jpg",
+		)
+    </script>
+</body>
+</html>
